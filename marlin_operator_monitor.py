@@ -1,9 +1,40 @@
 import requests
 from tabulate import tabulate
 import argparse
+import re
 
 POND_TOKEN_ID = "0x5802add45f8ec0a524470683e7295faacc853f97cf4a8d3ffbaaf25ce0fd87c4"
 MPOND_TOKEN_ID = "0x1635815984abab0dbb9afd77984dad69c24bf3d711bc0ddb1e2d53ef2d523e5e"
+GRAPH_SUBGRAPH_ID = "GUh83DEwZWMTkKaydusdkb46mLuAC7FTL4km1bcNjugc"
+DEFAULT_API_KEY = "eecb07a46bba6483dbdbd042493c43dc"
+
+def get_marlin_api_key():
+    try:
+        homepage_url = "https://arb1.marlin.org/relay/operator"
+        resp = requests.get(homepage_url)
+        resp.raise_for_status()
+        match = re.search(r'src="([^\"]*main\.[a-z0-9]+\.js)"', resp.text)
+        if not match:
+            return DEFAULT_API_KEY
+
+        js_path = match.group(1)
+        js_url = f"https://arb1.marlin.org{js_path}" if js_path.startswith("/") else f"https://arb1.marlin.org/{js_path}"
+        js_resp = requests.get(js_url)
+        js_resp.raise_for_status()
+
+        match = re.search(
+            r'relay_graphql_service_url:"https://gateway-arbitrum\\.network\\.thegraph\\.com/api/([a-f0-9]{32})/subgraphs/id',
+            js_resp.text
+        )
+        if match:
+            return match.group(1)
+    except:
+        pass
+
+    return DEFAULT_API_KEY
+
+def build_graphql_url():
+    return f"https://gateway-arbitrum.network.thegraph.com/api/{get_marlin_api_key()}/subgraphs/id/{GRAPH_SUBGRAPH_ID}"
 
 def fetch_json(url):
     r = requests.get(url)
@@ -75,7 +106,7 @@ def main():
     rewards_url = "https://sk.arb1.marlin.org/getExpectedReward"
     cluster_url = "https://sk.arb1.marlin.org/getClusterInfo"
     operators_url = "https://sk.arb1.marlin.org/getVerifiedOperators"
-    graphql_url = "https://gateway-arbitrum.network.thegraph.com/api/eecb07a46bba6483dbdbd042493c43dc/subgraphs/id/GUh83DEwZWMTkKaydusdkb46mLuAC7FTL4km1bcNjugc"
+    graphql_url = build_graphql_url()
 
     rewards = fetch_json(rewards_url)
     cluster = fetch_json(cluster_url)
