@@ -24,11 +24,12 @@ python marlin_operator_monitor.py [-f FILTER_INDEX] [-o ORDER]
 
 ### Options
 ```bash
+options:
   -h, --help            show this help message and exit
-  -f {0,1,2,3,4,5,6,7,8,9,10,11}, --filter {0,1,2,3,4,5,6,7,8,9,10,11}
-                        Column index to sort by (0-11). Use epilog below for details.
+  -f FILTER, --filter FILTER
+                        Column index to sort by (default 3)
   -o {asc,desc}, --order {asc,desc}
-                        Sort order: 'asc' for ascending, 'desc' for descending (default desc)
+  --format {table,csv,json,tsv,markdown}
 ```
 ### Example
 ```bash
@@ -44,18 +45,18 @@ Sorts by MPond APR in descending order.
 
 | Index | Column Name         | Description                                          |
 |-------|---------------------|------------------------------------------------------|
-| 0     | Operator            | Name of the node operator                           |
-| 1     | Network             | Network the node is connected to                    |
-| 2     | Address             | Node address                                        |
-| 3     | Total Staked POND   | Combined stake (POND + MPond converted to POND)     |
-| 4     | Staked POND         | Raw amount of POND staked                           |
-| 5     | Staked MPond        | Raw amount of MPond staked                          |
-| 6     | Relayers            | Number of active relayers                           |
-| 7     | Performance         | Node latency score                                  |
-| 8     | Fee (%)             | Operator’s commission percentage                    |
-| 9     | Tickets             | Number of participations (tickets)                 |
-| 10    | APR MPond (%)       | Estimated reward rate in MPond                     |
-| 11    | APR POND (%)        | Estimated reward rate in POND                      |
+| 0     | Operator            | Name of the node operator                            |
+| 1     | Network             | Network the node is connected to                     |
+| 2     | Address             | Node address                                         |
+| 3     | Total Staked POND   | Combined stake (POND + MPond converted to POND)      |
+| 4     | Staked POND         | Raw amount of POND staked                            |
+| 5     | Staked MPond        | Raw amount of MPond staked                           |
+| 6     | Relayers            | Number of active relayers                            |
+| 7     | Fee (%)             | Operator's commission percentage                     |
+| 8     | Performance         | Node latency score                                   |
+| 9     | Tickets             | Number of participations (tickets)                   |
+| 10    | APR MPond (%)       | Estimated reward rate in MPond                       |
+| 11    | APR POND (%)        | Estimated reward rate in POND                        |
 
 ---
 
